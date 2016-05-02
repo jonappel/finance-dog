@@ -10,7 +10,6 @@ class UserStocksController < ApplicationController
   # GET /user_stocks/1
   # GET /user_stocks/1.json
   def show
-
   end
 
   # GET /user_stocks/new
@@ -20,14 +19,13 @@ class UserStocksController < ApplicationController
 
   # GET /user_stocks/1/edit
   def edit
-
   end
 
   # POST /user_stocks
   # POST /user_stocks.json
   def create
     if params[:stock_id].present?
-      @user_stock = UserStock.new(stock_id: params[:stock_id], user: current_user)
+     @user_stock = UserStock.new(stock_id: params[:stock_id], user: current_user) 
     else
       stock = Stock.find_by_ticker(params[:stock_ticker])
       if stock
@@ -42,11 +40,12 @@ class UserStocksController < ApplicationController
         end
       end
     end
+    
 
     respond_to do |format|
       if @user_stock.save
-        format.html { redirect_to my_portfolio_path,
-          notice: "Stock #{@user_stock.stock.ticker} was successfully added." }
+        format.html { redirect_to my_portfolio_path, 
+          notice: "Stock #{@user_stock.stock.ticker} was successfully added"}
         format.json { render :show, status: :created, location: @user_stock }
       else
         format.html { render :new }
@@ -72,18 +71,16 @@ class UserStocksController < ApplicationController
   # DELETE /user_stocks/1
   # DELETE /user_stocks/1.json
   def destroy
-    if @user_stock.destroy
-      respond_to do |format|
-        format.html { redirect_to my_portfolio_path, notice: 'Stock successfully removed from portfolio.' }
-        format.json { head :no_content }
-      end
-    else
-      render 'my_portfolio'
+    @user_stock.destroy
+    respond_to do |format|
+      format.html { redirect_to my_portfolio_path, notice: 'Stock was successfully removed from portfolio.' }
+      format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
+
     def set_user_stock
       @user_stock = UserStock.find(params[:id])
     end
